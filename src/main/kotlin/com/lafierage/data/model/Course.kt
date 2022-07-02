@@ -18,7 +18,7 @@ object Courses : Table() {
     val id = integer("id").autoIncrement()
     val title = varchar("title", 128)
     val level = integer("level")
-    val isActive = byte("isActive")
+    val isActive = bool("isActive")
     val rank = integer("rank")
 
     override val primaryKey = PrimaryKey(id)
