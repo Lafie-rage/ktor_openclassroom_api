@@ -34,7 +34,7 @@ fun Application.configureRouting() {
         get("/") {
             call.respondText("Welcome to OpenClassrooms brand new server!")
         }
-        route("/course") {
+        route("/courses") {
             get {
                 call.respond(courseDao.getAll())
             }
