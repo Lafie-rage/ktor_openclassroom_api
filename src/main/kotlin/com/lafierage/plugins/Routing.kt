@@ -31,10 +31,13 @@ fun Application.configureRouting() {
 
     // Starting point for a Ktor app:
     routing {
+
         get("/") {
             call.respondText("Welcome to OpenClassrooms brand new server!")
         }
+
         route("/courses") {
+            // region GET routes
             get {
                 call.respond(courseDao.getAll())
             }
@@ -55,6 +58,7 @@ fun Application.configureRouting() {
                     status = HttpStatusCode.NotFound,
                 )
             }
+            // endregion
 
         }
     }
