@@ -3,16 +3,16 @@ package com.lafierage.plugins
 import com.lafierage.data.dao.CourseDao
 import com.lafierage.data.dao.CourseDaoImpl
 import io.ktor.http.*
-import io.ktor.server.routing.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import kotlinx.coroutines.runBlocking
 
 fun Application.configureRouting() {
 
     val courseDao: CourseDao = CourseDaoImpl().apply {
-        runBlocking {
-            if(getAll().isEmpty()) {
+        runBlocking { // Init database for testing purposes
+            if (getAll().isEmpty()) {
                 addNewCourse(
                     title = "How to troll a Troll ?",
                     level = 5,
@@ -35,15 +35,20 @@ fun Application.configureRouting() {
             call.respondText("Welcome to OpenClassrooms brand new server!")
         }
         route("/course") {
-            get("top"){
+            get {
+                call.respond(courseDao.getAll())
+            }
+
+            get("top") {
                 call.respond(courseDao.getTop())
             }
+
             get("{id?}") {
                 val id = call.parameters["id"] ?: return@get call.respondText(
                     "Missing id",
                     status = HttpStatusCode.BadRequest,
                 )
-                courseDao.get(id.toInt())?.let {course ->
+                courseDao.get(id.toInt())?.let { course ->
                     call.respond(course)
                 } ?: call.respondText(
                     "Sorry ! No course were found...",
