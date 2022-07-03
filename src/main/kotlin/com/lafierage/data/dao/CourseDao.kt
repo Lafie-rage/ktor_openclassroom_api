@@ -16,5 +16,7 @@ interface CourseDao {
         isActive: Boolean,
         rank: Int
     ): Course?
+
+    suspend fun delete(id: Int): Boolean
     
 }

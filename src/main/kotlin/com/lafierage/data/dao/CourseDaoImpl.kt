@@ -18,14 +18,14 @@ class CourseDaoImpl : CourseDao {
     override suspend fun getTop(): List<Course> =
         dbQuery {
             Courses
-                .select {Courses.rank greater 5}
+                .select { Courses.rank greater 5 }
                 .map(::resultRowToCourse)
         }
 
     override suspend fun get(id: Int): Course? =
         dbQuery {
             Courses
-                .select { Courses.id eq id}
+                .select { Courses.id eq id }
                 .map(::resultRowToCourse)
                 .singleOrNull()
         }
@@ -43,13 +43,17 @@ class CourseDaoImpl : CourseDao {
         isActive: Boolean,
         rank: Int
     ): Course? = dbQuery {
-            val insertStatement = Courses.insert{
-                it[Courses.title] = title
-                it[Courses.level] = level
-                it[Courses.isActive] = isActive
-                it[Courses.rank] = rank
-            }
-            insertStatement.resultedValues?.singleOrNull()?.let(::resultRowToCourse)
+        val insertStatement = Courses.insert {
+            it[Courses.title] = title
+            it[Courses.level] = level
+            it[Courses.isActive] = isActive
+            it[Courses.rank] = rank
         }
+        insertStatement.resultedValues?.singleOrNull()?.let(::resultRowToCourse)
+    }
+
+    override suspend fun delete(id: Int): Boolean = dbQuery {
+        Courses.deleteWhere { Courses.id eq id} > 0
+    }
 
 }

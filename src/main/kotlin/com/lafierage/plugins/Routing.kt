@@ -87,6 +87,30 @@ fun Application.configureRouting() {
                 }
             }
             // endregion
+
+            // region DELETE routes
+            delete("{id?}") {
+                val id = call.parameters["id"]?.toInt() ?: return@delete call.respond(HttpStatusCode.BadRequest)
+                if (courseDao.get(id) != null) {
+                    if (courseDao.delete(id)) {
+                        call.respondText(
+                            "",
+                            status = HttpStatusCode.NoContent,
+                        )
+                    } else {
+                        call.respondText(
+                            "Error while deleting item",
+                            status = HttpStatusCode.InternalServerError,
+                        )
+                    }
+                } else {
+                    call.respondText(
+                        "This item doesn't exist",
+                        status = HttpStatusCode.NotFound,
+                    )
+                }
+            }
+            // endregion
         }
     }
     routing {
