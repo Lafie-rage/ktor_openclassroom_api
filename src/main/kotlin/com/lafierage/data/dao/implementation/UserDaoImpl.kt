@@ -34,7 +34,7 @@ class UserDaoImpl : UserDao {
     override suspend fun get(pseudo: String, password: String): User? =
         dbQuery {
             Users
-                .select { (Users.pseudo eq pseudo) and (Users.password eq password) }
+                .select { (Users.pseudo eq pseudo) and (Users.password like password) }
                 .map(::resultRowToUser)
                 .singleOrNull()
         }

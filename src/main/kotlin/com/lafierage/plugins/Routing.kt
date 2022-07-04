@@ -36,7 +36,7 @@ fun Application.configureRouting() {
 
     val userDao: UserDao = UserDaoImpl().apply {
         runBlocking {
-            if(getAll().isEmpty()) {
+            if (getAll().isEmpty()) {
                 add(
                     "Lafie-rage",
                     "P@ssw0rd",
@@ -130,7 +130,26 @@ fun Application.configureRouting() {
         }
 
         route("/users") {
+
+            get("{id?}") {
+                val id = call.parameters["id"]?.toInt() ?: return@get call.respondText(
+                    "Missing id",
+                    status = HttpStatusCode.BadRequest,
+                )
+
+                userDao.get(id)?.let { user ->
+                    call.respond(
+                        user
+                    )
+                } ?: call.respondText(
+                    "Unable to retrieve a user with id $id",
+                    status = HttpStatusCode.NotFound,
+                )
+
+            }
+
             post("authenticate") {
+                println(userDao.getAll()[0])
                 val formParameters = call.receiveParameters()
                 try {
                     val pseudo = formParameters.getOrFail("pseudo")
@@ -155,6 +174,7 @@ fun Application.configureRouting() {
                 }
 
             }
+
         }
     }
     routing {
