@@ -35,4 +35,4 @@ out/
 ### VS Code ###
 .vscode/
 
-src/**/database_login.json
+src/**/database_config.json

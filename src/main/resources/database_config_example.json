@@ -1,0 +1,6 @@
+{
+  "username": "your_sql_user",
+  "password": "your_sql_user's password",
+  "aes_password": "your_aes_password",
+  "aes_salt": "your_aes_salt"
+}

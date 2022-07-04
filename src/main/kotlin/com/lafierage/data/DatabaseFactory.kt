@@ -2,6 +2,7 @@ package com.lafierage.data
 
 import com.lafierage.data.config.DatabaseLogin
 import com.lafierage.data.config.retrieveDatabaseLogin
+import com.lafierage.data.model.Users
 import com.lafierage.model.Courses
 import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.Database
@@ -17,6 +18,7 @@ object DatabaseFactory {
         val database = Database.connect(jdbcUrl, driverClassName, login.username, login.password)
         transaction(database) {
             SchemaUtils.create(Courses)
+            SchemaUtils.create(Users)
         }
     }
 

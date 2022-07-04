@@ -1,7 +1,9 @@
 package com.lafierage.plugins
 
 import com.lafierage.data.dao.CourseDao
-import com.lafierage.data.dao.CourseDaoImpl
+import com.lafierage.data.dao.UserDao
+import com.lafierage.data.dao.implementation.CourseDaoImpl
+import com.lafierage.data.dao.implementation.UserDaoImpl
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.plugins.*
@@ -27,6 +29,20 @@ fun Application.configureRouting() {
                     level = 1,
                     isActive = true,
                     rank = 5,
+                )
+            }
+        }
+    }
+
+    val userDao: UserDao = UserDaoImpl().apply {
+        runBlocking {
+            if(getAll().isEmpty()) {
+                add(
+                    "Lafie-rage",
+                    "P@ssw0rd",
+                    "Corentin",
+                    "Destrez",
+                    "corentin.destrez@mail.com",
                 )
             }
         }
@@ -111,6 +127,34 @@ fun Application.configureRouting() {
                 }
             }
             // endregion
+        }
+
+        route("/users") {
+            post("authenticate") {
+                val formParameters = call.receiveParameters()
+                try {
+                    val pseudo = formParameters.getOrFail("pseudo")
+                    val password = formParameters.getOrFail("password")
+                    userDao.get(
+                        pseudo,
+                        password,
+                    )?.let {
+                        call.respondText(
+                            "You're authenticated !",
+                            status = HttpStatusCode.OK,
+                        )
+                    } ?: call.respondText(
+                        "Unable to authenticate you...",
+                        status = HttpStatusCode.NotFound
+                    )
+                } catch (e: MissingRequestParameterException) {
+                    call.respondText(
+                        "Missing parameter : ${e.parameterName}",
+                        status = HttpStatusCode.BadRequest,
+                    )
+                }
+
+            }
         }
     }
     routing {

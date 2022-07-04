@@ -38,6 +38,7 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
+    implementation("org.jetbrains.exposed:exposed-crypt:$exposed_version")
 
     // MySQL connector
     implementation("mysql:mysql-connector-java:$mysql_connector_version")
