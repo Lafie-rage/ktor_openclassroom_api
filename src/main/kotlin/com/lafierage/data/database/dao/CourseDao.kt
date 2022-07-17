@@ -1,4 +1,4 @@
-package com.lafierage.data.dao
+package com.lafierage.data.database.dao
 
 import com.lafierage.model.Course
 

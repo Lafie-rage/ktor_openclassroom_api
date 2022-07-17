@@ -30,6 +30,11 @@ dependencies {
     implementation("io.ktor:ktor-server-tomcat-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-content-negotiation:$ktor_version")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
+    implementation("io.ktor:ktor-server-cio:$ktor_version")
+
+    // Authentication
+    implementation("io.ktor:ktor-server-auth:$ktor_version")
+    implementation("io.ktor:ktor-server-auth-jwt:$ktor_version")
 
     // Logback for logs
     implementation("ch.qos.logback:logback-classic:$logback_version")
@@ -38,7 +43,6 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
-    implementation("org.jetbrains.exposed:exposed-crypt:$exposed_version")
 
     // MySQL connector
     implementation("mysql:mysql-connector-java:$mysql_connector_version")

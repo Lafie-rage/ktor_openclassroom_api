@@ -1,4 +1,4 @@
-package com.lafierage.data.config
+package com.lafierage.config
 
 data class DatabaseLogin(
     val username: String,

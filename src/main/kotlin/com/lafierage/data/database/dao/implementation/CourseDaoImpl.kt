@@ -1,7 +1,7 @@
-package com.lafierage.data.dao.implementation
+package com.lafierage.data.database.dao.implementation
 
 import com.lafierage.data.DatabaseFactory.dbQuery
-import com.lafierage.data.dao.CourseDao
+import com.lafierage.data.database.dao.CourseDao
 import com.lafierage.model.Course
 import com.lafierage.model.Courses
 import org.jetbrains.exposed.sql.*

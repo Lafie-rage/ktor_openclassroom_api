@@ -1,9 +1,12 @@
 package com.lafierage.plugins
 
-import com.lafierage.data.dao.CourseDao
-import com.lafierage.data.dao.UserDao
-import com.lafierage.data.dao.implementation.CourseDaoImpl
-import com.lafierage.data.dao.implementation.UserDaoImpl
+import com.lafierage.controller.AuthenticationController
+import com.lafierage.data.database.dao.CourseDao
+import com.lafierage.data.database.dao.implementation.CourseDaoImpl
+import com.lafierage.request.LoginRequest
+import com.lafierage.request.RegisterRequest
+import com.lafierage.response.MISSING_CREDENTIALS
+import com.lafierage.response.generateHttpResponse
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.plugins.*
@@ -13,7 +16,7 @@ import io.ktor.server.routing.*
 import io.ktor.server.util.*
 import kotlinx.coroutines.runBlocking
 
-fun Application.configureRouting() {
+fun Application.configureRouting(authenticationController: AuthenticationController) {
 
     val courseDao: CourseDao = CourseDaoImpl().apply {
         runBlocking { // Init database for testing purposes
@@ -29,20 +32,6 @@ fun Application.configureRouting() {
                     level = 1,
                     isActive = true,
                     rank = 5,
-                )
-            }
-        }
-    }
-
-    val userDao: UserDao = UserDaoImpl().apply {
-        runBlocking {
-            if(getAll().isEmpty()) {
-                add(
-                    "Lafie-rage",
-                    "P@ssw0rd",
-                    "Corentin",
-                    "Destrez",
-                    "corentin.destrez@mail.com",
                 )
             }
         }
@@ -129,34 +118,54 @@ fun Application.configureRouting() {
             // endregion
         }
 
-        route("/users") {
-            post("authenticate") {
-                val formParameters = call.receiveParameters()
-                try {
-                    val pseudo = formParameters.getOrFail("pseudo")
-                    val password = formParameters.getOrFail("password")
-                    userDao.get(
-                        pseudo,
-                        password,
-                    )?.let {
-                        call.respondText(
-                            "You're authenticated !",
-                            status = HttpStatusCode.OK,
-                        )
-                    } ?: call.respondText(
-                        "Unable to authenticate you...",
-                        status = HttpStatusCode.NotFound
-                    )
-                } catch (e: MissingRequestParameterException) {
-                    call.respondText(
-                        "Missing parameter : ${e.parameterName}",
-                        status = HttpStatusCode.BadRequest,
-                    )
-                }
+        authenticationRouting(authenticationController)
 
+    }
+}
+
+fun Route.authenticationRouting(controller: AuthenticationController) {
+    route("/auth") {
+
+        post("/register") {
+
+            val credentials = kotlin.runCatching {
+                call.receive<RegisterRequest>()
+            }.getOrElse {
+                call.respond(MISSING_CREDENTIALS)
+                throw BadRequestException(MISSING_CREDENTIALS)
+            }
+            try {
+                val registerResponse =
+                    controller.register(
+                        pseudo = credentials.pseudo,
+                        password = credentials.password,
+                        firstName = credentials.firstName,
+                        lastName = credentials.lastName,
+                        email = credentials.email,
+                    )
+                val result = generateHttpResponse(registerResponse)
+                call.respond(result.code, result.body)
+            } catch (e: Exception) {
+                throw BadRequestException(e.message!!)
+            }
+
+        }
+
+        post("/login") {
+            val credentials = runCatching { call.receive<LoginRequest>() }.getOrElse {
+                call.respond(MISSING_CREDENTIALS)
+                throw BadRequestException(MISSING_CREDENTIALS)
+            }
+            try {
+                val loginResponse = controller.authenticate(
+                    pseudo = credentials.pseudo,
+                    password = credentials.password
+                )
+                val result = generateHttpResponse(loginResponse)
+                call.respond(result.code, result.body)
+            } catch (e: NoSuchElementException) {
+                call.respond(BadRequestException(e.message!!))
             }
         }
-    }
-    routing {
     }
 }

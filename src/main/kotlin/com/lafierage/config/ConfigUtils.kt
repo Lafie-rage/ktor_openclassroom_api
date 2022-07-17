@@ -1,4 +1,4 @@
-package com.lafierage.data.config
+package com.lafierage.config
 
 import com.google.gson.Gson
 import java.io.File
@@ -10,3 +10,6 @@ fun retrieveDatabaseLogin(): DatabaseLogin =
 
 val ENCRYPTING_CONFIGURATION: EncryptingConfig =
     Gson().fromJson(File(CONFIG_FILE_PATH).readText(), EncryptingConfig::class.java)
+
+val JWT_CONFIGURATION: JwtConfig =
+    Gson().fromJson(File(CONFIG_FILE_PATH).readText(), JwtConfig::class.java)

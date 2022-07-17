@@ -1,6 +1,8 @@
 {
   "username": "your_sql_user",
   "password": "your_sql_user's password",
-  "aes_password": "your_aes_password",
-  "aes_salt": "your_aes_salt"
+  "hmac_secret": "your_hmac_secret",
+  "jwt_secret": "your_jwt_secret",
+  "jwt_audience": "your_jwt_audience",
+  "jwt_issuer": "your_jwt_issuer"
 }
