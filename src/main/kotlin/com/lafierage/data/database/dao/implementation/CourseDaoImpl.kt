@@ -54,7 +54,7 @@ class CourseDaoImpl : CourseDao {
     }
 
     override suspend fun delete(id: Int): Boolean = dbQuery {
-        Courses.deleteWhere { Courses.id eq id} > 0
+        Courses.deleteWhere { Courses.id eq id } > 0
     }
 
 }

@@ -6,7 +6,8 @@ import com.lafierage.data.database.entity.UserEntity
 import com.lafierage.data.database.table.UsersTable
 import com.lafierage.data.dto.User
 import com.lafierage.data.dto.User.Companion.fromEntity
-import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.deleteWhere
 import java.util.*
 
 class AuthenticationDaoImpl : AuthenticationDao {

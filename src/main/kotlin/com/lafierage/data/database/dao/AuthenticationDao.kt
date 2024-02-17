@@ -1,7 +1,7 @@
 package com.lafierage.data.database.dao
 
 import com.lafierage.data.dto.User
-import java.util.UUID
+import java.util.*
 
 interface AuthenticationDao {
 

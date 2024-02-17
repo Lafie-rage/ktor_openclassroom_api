@@ -18,5 +18,5 @@ interface CourseDao {
     ): Course?
 
     suspend fun delete(id: Int): Boolean
-    
+
 }

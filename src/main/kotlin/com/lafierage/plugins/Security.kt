@@ -8,7 +8,7 @@ import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 import java.util.*
 
-class UserPrincipal(val user: User): Principal
+class UserPrincipal(val user: User) : Principal
 
 fun Application.configureSecurity(
     authenticationDao: AuthenticationDao,

@@ -5,9 +5,11 @@ import com.lafierage.controller.AuthenticationController
 import com.lafierage.controller.JwtController
 import com.lafierage.data.DatabaseFactory
 import com.lafierage.data.database.dao.implementation.AuthenticationDaoImpl
+import com.lafierage.plugins.configureRouting
+import com.lafierage.plugins.configureSecurity
+import com.lafierage.plugins.configureSerialization
 import io.ktor.server.engine.*
 import io.ktor.server.tomcat.*
-import com.lafierage.plugins.*
 import io.ktor.util.*
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
@@ -17,7 +19,7 @@ fun main() {
         DatabaseFactory.init()
 
         val jwtController = JwtController()
-        val encryptor = {s: String -> encrypt(s)}
+        val encryptor = { s: String -> encrypt(s) }
         val authenticationDao = AuthenticationDaoImpl()
 
         val authenticationController = AuthenticationController(

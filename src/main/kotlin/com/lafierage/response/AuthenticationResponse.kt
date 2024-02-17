@@ -9,7 +9,7 @@ class AuthenticationResponse(
     override val status: String,
     override val message: String,
     val token: String? = null,
-): Response {
+) : Response {
 
     companion object {
         fun failed(message: String) = AuthenticationResponse(
